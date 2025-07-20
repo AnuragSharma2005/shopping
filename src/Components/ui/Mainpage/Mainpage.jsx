@@ -6,7 +6,7 @@ export default function Mainpage() {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-yellow-50 px-4">
-      <div className="flex flex-col items-center w-full max-w-4xl space-y-6">
+      <div className="flex flex-col items-center w-full max-w-4xl space-y-3">
         <h2 className="text-5xl font-extrabold mb-10 text-center text-white drop-shadow-2xl tracking-tight">
           <span className="bg-gradient-to-r from-pink-300 via-fuchsia-400 to-purple-500 bg-clip-text text-transparent">
             Select Your Store
@@ -26,7 +26,7 @@ export default function Mainpage() {
           <img
             src="https://th.bing.com/th/id/OIP.lEie-TFhnFkKV4kBPkvOdQHaI5?w=158&h=190&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
             alt="Fashion"
-            className="w-28 h-28 rounded-xl object-cover bg-white"
+            className="w-24 h-24 rounded-xl object-cover bg-white"
           />
         </div>
 
