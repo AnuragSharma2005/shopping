@@ -10,7 +10,7 @@ import { Routes, Route } from 'react-router-dom';
 
 // import Profile from './Components/profile/profile';
 // Mainpage --->
-import Mainpage from './Components/ui/mainpage/Mainpage'
+import Mainpage from './Components/ui/Mainpage/Mainpage'
 
 import Productdetails from './Components/Seller/productdetails';
 
