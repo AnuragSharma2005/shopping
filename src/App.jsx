@@ -25,7 +25,7 @@ import CartDrawer from './Components/Cart/CartDrawer';
 
 // Mens Components --->
 
-import Shirt from './Components/ui/Fashion/Men/shirt'
+import Shirt from './Components/ui/Fashion/Men/Shirt'
 import Men from './Components/ui/Fashion/Men/Men'
 import MKurta from './Components/ui/Fashion/Men/MKurta'
 import MFormal from './Components/ui/Fashion/Men/MFormal';
