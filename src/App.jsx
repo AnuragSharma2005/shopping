@@ -19,6 +19,7 @@ import Productdetails from './Components/Seller/productdetails';
 // Select ----> 
 import Select from './Components/ui/Fashion/Select'
 import Cart from './Components/Cart/Cart';
+import CartDrawer from './Components/Cart/CartDrawer';
 // import Navbar from './Components/ui/Essentials/Essentials'; 
 
 
@@ -163,6 +164,7 @@ function App() {
 
       <Route path="/profile/profile/" element={<Profile />} /> 
       <Route path="/cart/cart" element={<Cart />} />
+       <Route path="/" element={<CartDrawer />} />
 
 
 

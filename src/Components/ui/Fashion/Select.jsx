@@ -50,9 +50,9 @@ export default function Select() {
    {/* Banner Image */}
       <div className="w-full px-4 md:px-10 py-6">
         <img
-          src="https://media.femalemag.com.sg/public/2019/03/MainImage01.jpg"
+          src="https://t3.ftcdn.net/jpg/05/33/69/68/360_F_533696890_3oTdDiMKgPTPDHlIwI7QkagNQY7njrrz.jpg"
           alt="Banner"
-          className="w-full h-[200px] sm:h-[300px] md:h-[400px] rounded-xl object-cover"
+          className="w-full h-[200px] sm:h-[300px] md:h-[300px] rounded-xl object-cover"
         />
       </div>
 
