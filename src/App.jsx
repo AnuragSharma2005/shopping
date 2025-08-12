@@ -25,16 +25,16 @@ import CartDrawer from './Components/Cart/CartDrawer';
 
 // Mens Components --->
 
-import Shirt from './Components/ui/Fashion/men/shirt'
+import Shirt from './Components/ui/Fashion/Men/shirt'
 import Men from './Components/ui/Fashion/Men/Men'
-import MKurta from './Components/ui/Fashion/men/MKurta'
+import MKurta from './Components/ui/Fashion/Men/MKurta'
 import MFormal from './Components/ui/Fashion/Men/MFormal';
-import Mjeans from './Components/ui/Fashion/men/Mjeans'
-import MShades from './Components/ui/Fashion/men/MShades'
-import Mshoes from './Components/ui/Fashion/men/Mshoes'
-import MSports from './Components/ui/Fashion/men/MSports'
-import MWatch from './Components/ui/Fashion/men/MWatch'
-import Tshirt from './Components/ui/Fashion/men/Tshirt'
+import Mjeans from './Components/ui/Fashion/Men/Mjeans'
+import MShades from './Components/ui/Fashion/Men/MShades'
+import Mshoes from './Components/ui/Fashion/Men/Mshoes'
+import MSports from './Components/ui/Fashion/Men/MSports'
+import MWatch from './Components/ui/Fashion/Men/MWatch'
+import Tshirt from './Components/ui/Fashion/Men/Tshirt'
 import Innerwear from './Components/ui/Fashion/Men/Innerwear';
 import Wallet from './Components/ui/Fashion/Men/Wallet';
 
@@ -53,7 +53,7 @@ import Wsports from './Components/ui/Fashion/Women/Wsports'
 import Wwatch from './Components/ui/Fashion/Women/Wwatch'
 import Wshades from './Components/ui/Fashion/Women/Wshades'
 import Kurti from './Components/ui/Fashion/Women/Kurti'
-import Jewellery from './Components/ui/Fashion/Women/jewellery'
+import Jewellery from './Components/ui/Fashion/Women/Jewellery'
 
 
 // Baby Component ---->
@@ -96,7 +96,7 @@ import Med from './Components/ui/Pharmacy/Med';
 import Lab from './Components/ui/Pharmacy/Lab';
 import Skincare from './Components/ui/Pharmacy/Skincare';
 import Nutrition from './Components/ui/Pharmacy/Nutritions';
-import Wcare from './Components/ui/Pharmacy/wcare';
+import Wcare from './Components/ui/Pharmacy/Wcare';
 import Clinical from './Components/ui/Pharmacy/Clinical';
 import Dr from './Components/ui/Pharmacy/Dr';
 import Mother from './Components/ui/Pharmacy/Mother';
