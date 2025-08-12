@@ -8,7 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 // login Component --->
 // import LoginSignUp from './Components/ui/Authentication/Login'
 
-import Profile from './Components/profile/profile';
+// import Profile from './Components/profile/profile';
 // Mainpage --->
 import Mainpage from './Components/ui/mainpage/Mainpage'
 
@@ -162,7 +162,7 @@ function App() {
       <Route path="/fashion/baby/toy/" element={<Toy />} />
       
 
-      <Route path="/profile/profile/" element={<Profile />} /> 
+      {/* <Route path="/profile/profile/" element={<Profile />} />  */}
       <Route path="/cart/cart" element={<Cart />} />
        <Route path="/" element={<CartDrawer />} />
 
