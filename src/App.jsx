@@ -1,126 +1,101 @@
-import { Component, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Routes, Route } from 'react-router-dom';  
+"use client"
 
+import { Routes, Route, Navigate, useLocation } from "react-router-dom"
+import "./App.css"
+import { AuthProvider } from "./contexts/AuthContext"
 
-// login Component --->
-// import LoginSignUp from './Components/ui/Authentication/Login'
+// Components
+import LoginSignUp from "./Components/ui/Authentication/Login"
+import ProfilePage from "./Components/Profile/Profile"
+import Mainpage from "./Components/ui/Mainpage/Mainpage"
+import Productdetails from "./Components/Seller/Productdetails"
+import Select from "./Components/ui/Fashion/Select"
+import Cart from "./Components/Cart/Cart"
 
-// import Profile from './Components/profile/profile';
-// Mainpage --->
-import Mainpage from './Components/ui/Mainpage/Mainpage'
+// Men
+import Shirt from "./Components/ui/Fashion/men/Shirt"
+import Men from "./Components/ui/Fashion/men/Men"
+import MKurta from "./Components/ui/Fashion/men/MKurta"
+import MFormal from "./Components/ui/Fashion/men/MFormal"
+import Mjeans from "./Components/ui/Fashion/men/Mjeans"
+import MShades from "./Components/ui/Fashion/men/MShades"
+import Mshoes from "./Components/ui/Fashion/men/Mshoes"
+import MSports from "./Components/ui/Fashion/men/MSports"
+import MWatch from "./Components/ui/Fashion/men/MWatch"
+import Tshirt from "./Components/ui/Fashion/men/Tshirt"
+import Innerwear from "./Components/ui/Fashion/men/Innerwear"
+import Wallet from "./Components/ui/Fashion/men/Wallet"
 
-import Productdetails from './Components/Seller/Productdetails';
+// Women
+import Women from "./Components/ui/Fashion/Women/Women"
+import Tops from "./Components/ui/Fashion/Women/Tops"
+import Saree from "./Components/ui/Fashion/Women/Saree"
+import Wjeans from "./Components/ui/Fashion/Women/Wjeans"
+import Wshoes from "./Components/ui/Fashion/Women/Wshoes"
+import Bags from "./Components/ui/Fashion/Women/Bags"
+import Wformals from "./Components/ui/Fashion/Women/Wformals"
+import Wsports from "./Components/ui/Fashion/Women/Wsports"
+import Wwatch from "./Components/ui/Fashion/Women/Wwatch"
+import Wshades from "./Components/ui/Fashion/Women/Wshades"
+import Kurti from "./Components/ui/Fashion/Women/Kurti"
+import Jewellery from "./Components/ui/Fashion/Women/Jewellery"
 
-// import Seller from './Components/Seller/Seller';
-// import Buyer from './Components/Seller/Buyer/Buyer';
-// Select ----> 
-import Select from './Components/ui/Fashion/Select'
-import Cart from './Components/Cart/Cart';
-import CartDrawer from './Components/Cart/CartDrawer';
-// import Navbar from './Components/ui/Essentials/Essentials'; 
+// Baby
+import Baby from "./Components/ui/Fashion/Baby/Baby"
+import Boy from "./Components/ui/Fashion/Baby/Boy"
+import Girl from "./Components/ui/Fashion/Baby/Girl"
+import Toy from "./Components/ui/Fashion/Baby/Toy"
+import Bshoes from "./Components/ui/Fashion/Baby/Bshoes"
+import Boutique from "./Components/ui/Fashion/Baby/Boutique"
+import Nursery from "./Components/ui/Fashion/Baby/Nursery"
+import Gear from "./Components/ui/Fashion/Baby/Gear"
+import Feeding from "./Components/ui/Fashion/Baby/Feeding"
+import Bath from "./Components/ui/Fashion/Baby/Bath"
 
+// Essentials
+import Essentials from "./Components/ui/Essentials/Essentials"
+import Fruits from "./Components/ui/Essentials/Fruits"
+import Sweets from "./Components/ui/Essentials/Sweets"
+import Frozen from "./Components/ui/Essentials/Frozen"
+import Icecream from "./Components/ui/Essentials/Icecream"
+import Packaged from "./Components/ui/Essentials/Packaged"
+import Dairy from "./Components/ui/Essentials/Dairy"
+import Juices from "./Components/ui/Essentials/Juices"
+import BreakFast from "./Components/ui/Essentials/Breakfast"
+import Tea from "./Components/ui/Essentials/Tea"
+import Cookies from "./Components/ui/Essentials/Cookies"
+import Soap from "./Components/ui/Essentials/Soap"
+import Clean from "./Components/ui/Essentials/Clean"
+import Books from "./Components/ui/Essentials/Books"
+import Kitchen from "./Components/ui/Essentials/Kitchen"
 
-// Mens Components --->
+// Pharmacy
+import Pharmacy from "./Components/ui/Pharmacy/Pharmacy"
+import Ayurveics from "./Components/ui/Pharmacy/Ayurveics"
+import Med from "./Components/ui/Pharmacy/Med"
+import Lab from "./Components/ui/Pharmacy/Lab"
+import Skincare from "./Components/ui/Pharmacy/Skincare"
+import Nutrition from "./Components/ui/Pharmacy/Nutritions"
+import Wcare from "./Components/ui/Pharmacy/Wcare"
+import Clinical from "./Components/ui/Pharmacy/Clinical"
+import Dr from "./Components/ui/Pharmacy/Dr"
+import Mother from "./Components/ui/Pharmacy/Mother"
+import Elder from "./Components/ui/Pharmacy/Elder"
 
-import Shirt from './Components/ui/Fashion/men/Shirt'
-import Men from './Components/ui/Fashion/men/Men'
-import MKurta from './Components/ui/Fashion/men/MKurta'
-import MFormal from './Components/ui/Fashion/men/MFormal';
-import Mjeans from './Components/ui/Fashion/men/Mjeans'
-import MShades from './Components/ui/Fashion/men/MShades'
-import Mshoes from './Components/ui/Fashion/men/Mshoes'
-import MSports from './Components/ui/Fashion/men/MSports'
-import MWatch from './Components/ui/Fashion/men/MWatch'
-import Tshirt from './Components/ui/Fashion/men/Tshirt'
-import Innerwear from './Components/ui/Fashion/men/Innerwear';
-import Wallet from './Components/ui/Fashion/men/Wallet';
-
-
-
-// Women Component ---->
-
-import Women from './Components/ui/Fashion/Women/Women'
-import Tops from './Components/ui/Fashion/Women/Tops'
-import Saree from './Components/ui/Fashion/Women/Saree'
-import Wjeans from './Components/ui/Fashion/Women/Wjeans'
-import Wshoes from './Components/ui/Fashion/Women/Wshoes'
-import Bags from './Components/ui/Fashion/Women/Bags'
-import Wformals from './Components/ui/Fashion/Women/Wformals'
-import Wsports from './Components/ui/Fashion/Women/Wsports'
-import Wwatch from './Components/ui/Fashion/Women/Wwatch'
-import Wshades from './Components/ui/Fashion/Women/Wshades'
-import Kurti from './Components/ui/Fashion/Women/Kurti'
-import Jewellery from './Components/ui/Fashion/Women/Jewellery'
-
-
-// Baby Component ---->
-
-import Baby from './Components/ui/Fashion/Baby/Baby'
-import Boy from './Components/ui/Fashion/Baby/Boy'
-import Girl from './Components/ui/Fashion/Baby/Girl'
-import Toy from './Components/ui/Fashion/Baby/Toy'
-import Bshoes from './Components/ui/Fashion/Baby/Bshoes'
-import Boutique from './Components/ui/Fashion/Baby/Boutique'
-import Nursery from './Components/ui/Fashion/Baby/Nursery'
-import Gear from './Components/ui/Fashion/Baby/Gear'
-import Feeding from './Components/ui/Fashion/Baby/Feeding'
-import Bath from './Components/ui/Fashion/Baby/Bath'
-
-// Essentials Component ---->
-
-import Essentials from './Components/ui/Essentials/Essentials'
-import Fruits from './Components/ui/Essentials/Fruits';
-import Sweets from './Components/ui/Essentials/Sweets';
-import Frozen from './Components/ui/Essentials/Frozen';
-import Icecream from './Components/ui/Essentials/Icecream';
-import Packaged from './Components/ui/Essentials/Packaged';
-import Dairy from './Components/ui/Essentials/Dairy';
-import Juices from './Components/ui/Essentials/Juices';
-import BreakFast from './Components/ui/Essentials/Breakfast';
-import Tea from './Components/ui/Essentials/Tea';
-import Cookies from './Components/ui/Essentials/Cookies';
-import Soap from './Components/ui/Essentials/Soap';
-import Clean from './Components/ui/Essentials/Clean';
-import Books from './Components/ui/Essentials/Books';
-import Kitchen from './Components/ui/Essentials/Kitchen';
-
-
-// Pharmacy Component ---->
-
-import Pharmacy from './Components/ui/Pharmacy/Pharmacy'
-import Ayurveics from './Components/ui/Pharmacy/Ayurveics';
-import Med from './Components/ui/Pharmacy/Med';
-import Lab from './Components/ui/Pharmacy/Lab';
-import Skincare from './Components/ui/Pharmacy/Skincare';
-import Nutrition from './Components/ui/Pharmacy/Nutritions';
-import Wcare from './Components/ui/Pharmacy/Wcare';
-import Clinical from './Components/ui/Pharmacy/Clinical';
-import Dr from './Components/ui/Pharmacy/Dr';
-import Mother from './Components/ui/Pharmacy/Mother';
-import Elder from './Components/ui/Pharmacy/Elder';
-
-function App() {
-  
+function AppContent() {
+  const location = useLocation()
 
   return (
-   
-
-    <>
- {/* <LoginSignUp />*/}
- {/* <Navbar /> */}
-  {/* <Seller /> */}
-  <profile />
-
-   
     <Routes>
-
+      {/* Public Routes */}
       <Route path="/" element={<Mainpage />} />
 
+      <Route path="/auth/login" element={<LoginSignUp />} />
+      <Route path="/profile" element={<ProfilePage />} />
+
+      {/* Other Shop Routes */}
       <Route path="/fashion" element={<Select />} />
-      <Route path="/essentials" element={<Essentials />} /> 
+      <Route path="/essentials" element={<Essentials />} />
       <Route path="/pharmacy" element={<Pharmacy />} />
 
       <Route path="/fashion/men/" element={<Men />} />
@@ -160,50 +135,49 @@ function App() {
       <Route path="/fashion/baby/girl/" element={<Girl />} />
       <Route path="/fashion/baby/nursery/" element={<Nursery />} />
       <Route path="/fashion/baby/toy/" element={<Toy />} />
-      
 
-      {/* <Route path="/profile/profile/" element={<Profile />} />  */}
       <Route path="/cart/cart" element={<Cart />} />
-       <Route path="/" element={<CartDrawer />} />
 
+      <Route path="/essentials/fruits/" element={<Fruits />} />
+      <Route path="/essentials/sweets/" element={<Sweets />} />
+      <Route path="/essentials/frozen/" element={<Frozen />} />
+      <Route path="/essentials/icecream/" element={<Icecream />} />
+      <Route path="/essentials/packed/" element={<Packaged />} />
+      <Route path="/essentials/dairy/" element={<Dairy />} />
+      <Route path="/essentials/juices/" element={<Juices />} />
+      <Route path="/essentials/breakfast/" element={<BreakFast />} />
+      <Route path="/essentials/tea/" element={<Tea />} />
+      <Route path="/essentials/cookies/" element={<Cookies />} />
+      <Route path="/essentials/soap/" element={<Soap />} />
+      <Route path="/essentials/clean/" element={<Clean />} />
+      <Route path="/essentials/books/" element={<Books />} />
+      <Route path="/essentials/kitchen/" element={<Kitchen />} />
 
+      <Route path="/pharmacy/ayurveics/" element={<Ayurveics />} />
+      <Route path="/pharmacy/med/" element={<Med />} />
+      <Route path="/pharmacy/lab/" element={<Lab />} />
+      <Route path="/pharmacy/skincare/" element={<Skincare />} />
+      <Route path="/pharmacy/nutrition/" element={<Nutrition />} />
+      <Route path="/pharmacy/wcare/" element={<Wcare />} />
+      <Route path="/pharmacy/clinical/" element={<Clinical />} />
+      <Route path="/pharmacy/dr/" element={<Dr />} />
+      <Route path="/pharmacy/mother/" element={<Mother />} />
+      <Route path="/pharmacy/elder/" element={<Elder />} />
 
-      <Route path="/essentials/fruits/" element={<Fruits />} /> 
-      <Route path="/essentials/sweets/" element={<Sweets />} /> 
-      <Route path="/essentials/frozen/" element={<Frozen />} /> 
-      <Route path="/essentials/icecream/" element={<Icecream />} /> 
-      <Route path="/essentials/packed/" element={<Packaged />} /> 
-      <Route path="/essentials/dairy/" element={<Dairy />} /> 
-      <Route path="/essentials/juices/" element={<Juices />} /> 
-      <Route path="/essentials/breakfast/" element={<BreakFast />} /> 
-      <Route path="/essentials/tea/" element={<Tea />} /> 
-      <Route path="/essentials/cookies/" element={<Cookies />} /> 
-      <Route path="/essentials/soap/" element={<Soap />} /> 
-      <Route path="/essentials/clean/" element={<Clean />} /> 
-      <Route path="/essentials/books/" element={<Books />} /> 
-      <Route path="/essentials/kitchen/" element={<Kitchen />} /> 
+      <Route path="/product/:id" element={<Productdetails />} />
 
-
-      <Route path="/pharmacy/ayurveics/" element={<Ayurveics />} /> 
-      <Route path="/pharmacy/med/" element={<Med />} /> 
-      <Route path="/pharmacy/lab/" element={<Lab />} /> 
-      <Route path="/pharmacy/skincare/" element={<Skincare />} /> 
-      <Route path="/pharmacy/nutrition/" element={<Nutrition />} /> 
-      <Route path="/pharmacy/wcare/" element={<Wcare />} /> 
-      <Route path="/pharmacy/clinical/" element={<Clinical />} /> 
-      <Route path="/pharmacy/dr/" element={<Dr />} />  
-      <Route path="/pharmacy/mother/" element={<Mother />} />  
-      <Route path="/pharmacy/elder/" element={<Elder />} />  
-
-      
-     <Route path="/product/:id" element={<Productdetails />} />
-    </Routes> 
-      
- 
-    </>
-  
-     
+      {/* Default redirect */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 
-export default App  
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  )
+}
+
+export default App
