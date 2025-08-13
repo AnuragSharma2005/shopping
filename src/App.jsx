@@ -25,18 +25,18 @@ import CartDrawer from './Components/Cart/CartDrawer';
 
 // Mens Components --->
 
-import Shirt from './Components/ui/Fashion/Men/Shirt'
-import Men from './Components/ui/Fashion/Men/Men'
-import MKurta from './Components/ui/Fashion/Men/MKurta'
-import MFormal from './Components/ui/Fashion/Men/MFormal';
-import Mjeans from './Components/ui/Fashion/Men/Mjeans'
-import MShades from './Components/ui/Fashion/Men/MShades'
-import Mshoes from './Components/ui/Fashion/Men/Mshoes'
-import MSports from './Components/ui/Fashion/Men/MSports'
-import MWatch from './Components/ui/Fashion/Men/MWatch'
-import Tshirt from './Components/ui/Fashion/Men/Tshirt'
-import Innerwear from './Components/ui/Fashion/Men/Innerwear';
-import Wallet from './Components/ui/Fashion/Men/Wallet';
+import Shirt from './Components/ui/Fashion/men/Shirt'
+import Men from './Components/ui/Fashion/men/Men'
+import MKurta from './Components/ui/Fashion/men/MKurta'
+import MFormal from './Components/ui/Fashion/men/MFormal';
+import Mjeans from './Components/ui/Fashion/men/Mjeans'
+import MShades from './Components/ui/Fashion/men/MShades'
+import Mshoes from './Components/ui/Fashion/men/Mshoes'
+import MSports from './Components/ui/Fashion/men/MSports'
+import MWatch from './Components/ui/Fashion/men/MWatch'
+import Tshirt from './Components/ui/Fashion/men/Tshirt'
+import Innerwear from './Components/ui/Fashion/men/Innerwear';
+import Wallet from './Components/ui/Fashion/men/Wallet';
 
 
 
