@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaHeart, FaSearch, FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 
 export default function Navbar({ title, isAuthenticated }) {
-  const [isOpen, setIsOpen] = useState(false); // Mobile menu
-  const [isCartOpen, setIsCartOpen] = useState(false); // Cart drawer
+  const [isOpen, setIsOpen] = useState(false); 
+  const [isCartOpen, setIsCartOpen] = useState(false); 
   const location = useLocation();
   const path = location.pathname;
 
@@ -172,7 +172,7 @@ export default function Navbar({ title, isAuthenticated }) {
       {isCartOpen && (
         <div
           className="fixed inset-0 bg-black opacity-40 z-40"
-          onClick={() => setIsCartOpen(false)}
+          onClick={() => setIsCartOpen(false)} 
         />
       )}
     </div>
