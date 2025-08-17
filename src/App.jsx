@@ -88,6 +88,7 @@ function AppContent() {
   return (
     <Routes>
       {/* Public Routes */}
+
       <Route path="/" element={<Mainpage />} />
 
       <Route path="/auth/login" element={<LoginSignUp />} />
