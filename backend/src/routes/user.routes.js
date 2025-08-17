@@ -33,7 +33,7 @@ router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 router.route("/admin/users").get(
     verifyJWT,
     authorizeRoles("admin"),
-    // You can add a getAllUsers controller here if needed
+    // You can add a getAllUsers controller here if needed  
 );
 
 // Seller routes (authentication + seller role required)

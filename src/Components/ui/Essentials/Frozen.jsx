@@ -1,92 +1,91 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FaHeart, FaSearch, FaShoppingCart, FaUserCircle } from 'react-icons/fa';
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
+"use client"
+
+import { useState, useEffect, useRef } from "react"
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
+import Navbar from "../Navbar/Navbar"
 
 export default function Frozen() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [currentBanner, setCurrentBanner] = useState(0);
-  const [slide, setSlide] = useState(false);
-  const timeoutRef = useRef(null);
-  const touchStartXRef = useRef(0);
-  const touchEndXRef = useRef(0);
+  const [isOpen, setIsOpen] = useState(false)
+  const [currentBanner, setCurrentBanner] = useState(0)
+  const [slide, setSlide] = useState(false)
+  const timeoutRef = useRef(null)
+  const touchStartXRef = useRef(0)
+  const touchEndXRef = useRef(0)
 
   const banners = [
     {
-      title: 'Paan Corner',
-      description: 'Smoking Accessories, Mints & More',
-      image: '/paan.png',
-      bg: 'bg-teal-100',
-      text: 'text-teal-900',
-      button: 'text-teal-700',
+      title: "Paan Corner",
+      description: "Smoking Accessories, Mints & More",
+      image: "/paan.png",
+      bg: "bg-teal-100",
+      text: "text-teal-900",
+      button: "text-teal-700",
     },
     {
-      title: 'Men’s Fashion',
-      description: 'Trendy Shirts, T-Shirts & More',
-      image: '/mens-fashion.png',
-      bg: 'bg-blue-100',
-      text: 'text-blue-900',
-      button: 'text-blue-700',
+      title: "Men’s Fashion",
+      description: "Trendy Shirts, T-Shirts & More",
+      image: "/mens-fashion.png",
+      bg: "bg-blue-100",
+      text: "text-blue-900",
+      button: "text-blue-700",
     },
     {
-      title: 'Snacks & Beverages',
-      description: 'Grab a bite or a cold drink',
-      image: '/snacks.png',
-      bg: 'bg-yellow-100',
-      text: 'text-yellow-900',
-      button: 'text-yellow-700',
+      title: "Snacks & Beverages",
+      description: "Grab a bite or a cold drink",
+      image: "/snacks.png",
+      bg: "bg-yellow-100",
+      text: "text-yellow-900",
+      button: "text-yellow-700",
     },
     {
-      title: 'Personal Care',
-      description: 'Face Wash, Perfume, Grooming Kits',
-      image: '/personal-care.png',
-      bg: 'bg-pink-100',
-      text: 'text-pink-900',
-      button: 'text-pink-700',
+      title: "Personal Care",
+      description: "Face Wash, Perfume, Grooming Kits",
+      image: "/personal-care.png",
+      bg: "bg-pink-100",
+      text: "text-pink-900",
+      button: "text-pink-700",
     },
-  ];
+  ]
 
   const goToNext = () => {
-    setSlide(true);
+    setSlide(true)
     setTimeout(() => {
-      setCurrentBanner((prev) => (prev + 1) % banners.length);
-      setSlide(false);
-    }, 300);
-  };
+      setCurrentBanner((prev) => (prev + 1) % banners.length)
+      setSlide(false)
+    }, 300)
+  }
 
   const goToPrev = () => {
-    setSlide(true);
+    setSlide(true)
     setTimeout(() => {
-      setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
-      setSlide(false);
-    }, 300);
-  };
+      setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length)
+      setSlide(false)
+    }, 300)
+  }
 
   useEffect(() => {
-    if (timeoutRef.current) clearInterval(timeoutRef.current);
-    timeoutRef.current = setInterval(goToNext, 3000);
-    return () => clearInterval(timeoutRef.current);
-  }, [currentBanner]);
+    if (timeoutRef.current) clearInterval(timeoutRef.current)
+    timeoutRef.current = setInterval(goToNext, 3000)
+    return () => clearInterval(timeoutRef.current)
+  }, [currentBanner])
 
   const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX;
-  };
+    touchStartXRef.current = e.touches[0].clientX
+  }
 
   const handleTouchEnd = (e) => {
-    touchEndXRef.current = e.changedTouches[0].clientX;
-    const distance = touchStartXRef.current - touchEndXRef.current;
-    if (distance > 50) goToNext();
-    else if (distance < -50) goToPrev();
-  };
+    touchEndXRef.current = e.changedTouches[0].clientX
+    const distance = touchStartXRef.current - touchEndXRef.current
+    if (distance > 50) goToNext()
+    else if (distance < -50) goToPrev()
+  }
 
-  const current = banners[currentBanner];
+  const current = banners[currentBanner]
 
   return (
     <div className="w-full shadow relative z-50">
       {/* Navigation Bar */}
-     <Navbar title="Frozen Food" />
-
+      <Navbar title="Frozen Food" />
 
       {/* Offer Banner with Swipe and Arrows */}
       <div className="px-6 py-4 relative transition-all duration-500">
@@ -94,7 +93,7 @@ export default function Frozen() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           className={`${current.bg} rounded-xl flex items-center justify-between p-6 cursor-pointer transition-all duration-300 ${
-            slide ? 'translate-x-10 opacity-0' : 'translate-x-0 opacity-100'
+            slide ? "translate-x-10 opacity-0" : "translate-x-0 opacity-100"
           }`}
         >
           <div>
@@ -106,13 +105,19 @@ export default function Frozen() {
           </div>
           <img src={current.image} alt={current.title} className="w-32 h-40 object-contain" />
         </div>
-        <button onClick={goToPrev} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md">
+        <button
+          onClick={goToPrev}
+          className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md"
+        >
           <AiOutlineLeft size={24} />
         </button>
-        <button onClick={goToNext} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md">
+        <button
+          onClick={goToNext}
+          className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md"
+        >
           <AiOutlineRight size={24} />
         </button>
       </div>
     </div>
-  );
+  )
 }

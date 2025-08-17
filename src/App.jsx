@@ -9,6 +9,7 @@ import LoginSignUp from "./Components/ui/Authentication/Login"
 import ProfilePage from "./Components/Profile/Profile"
 import Mainpage from "./Components/ui/Mainpage/Mainpage"
 import Productdetails from "./Components/Seller/Productdetails"
+import Seller from "./Components/Seller/Seller"
 import Select from "./Components/ui/Fashion/Select"
 import Cart from "./Components/Cart/Cart"
 
@@ -165,7 +166,9 @@ function AppContent() {
       <Route path="/pharmacy/mother/" element={<Mother />} />
       <Route path="/pharmacy/elder/" element={<Elder />} />
 
+      <Route path="/seller" element={<Seller />} />
       <Route path="/product/:id" element={<Productdetails />} />
+
 
       {/* Default redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />

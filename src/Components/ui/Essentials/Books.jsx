@@ -1,118 +1,145 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FaHeart, FaSearch, FaShoppingCart, FaUserCircle } from 'react-icons/fa';
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
+"use client"
+
+import { useState, useRef } from "react"
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
+import { useNavigate } from "react-router-dom"
+import Navbar from "../Navbar/Navbar"
+import ProductCard from "../../ProductCard"
+import { useProducts } from "../../hooks/userProducts"
 
 export default function Books() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [currentBanner, setCurrentBanner] = useState(0);
-  const [slide, setSlide] = useState(false);
-  const timeoutRef = useRef(null);
-  const touchStartXRef = useRef(0);
-  const touchEndXRef = useRef(0);
+  const navigate = useNavigate()
+  const { products, loading, error } = useProducts("books")
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const sliderRef = useRef(null)
 
   const banners = [
     {
-      title: 'Paan Corner',
-      description: 'Smoking Accessories, Mints & More',
-      image: '/paan.png',
-      bg: 'bg-teal-100',
-      text: 'text-teal-900',
-      button: 'text-teal-700',
+      title: "Art & Craft",
+      description: "Creative supplies for artists",
+      buttonText: "Order Now",
+      bgColor: "bg-pink-100",
+      image: "/placeholder-w1pug.png",
     },
     {
-      title: 'Men’s Fashion',
-      description: 'Trendy Shirts, T-Shirts & More',
-      image: '/mens-fashion.png',
-      bg: 'bg-blue-100',
-      text: 'text-blue-900',
-      button: 'text-blue-700',
+      title: "Office Supplies",
+      description: "Professional stationery for work",
+      buttonText: "Order Now",
+      bgColor: "bg-green-100",
+      image: "/assorted-office-supplies.png",
     },
     {
-      title: 'Snacks & Beverages',
-      description: 'Grab a bite or a cold drink',
-      image: '/snacks.png',
-      bg: 'bg-yellow-100',
-      text: 'text-yellow-900',
-      button: 'text-yellow-700',
+      title: "Educational Books",
+      description: "Learning materials for students",
+      buttonText: "Order Now",
+      bgColor: "bg-blue-100",
+      image: "/placeholder-i13nu.png",
     },
-    {
-      title: 'Personal Care',
-      description: 'Face Wash, Perfume, Grooming Kits',
-      image: '/personal-care.png',
-      bg: 'bg-pink-100',
-      text: 'text-pink-900',
-      button: 'text-pink-700',
-    },
-  ];
+  ]
 
-  const goToNext = () => {
-    setSlide(true);
-    setTimeout(() => {
-      setCurrentBanner((prev) => (prev + 1) % banners.length);
-      setSlide(false);
-    }, 300);
-  };
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % banners.length)
+  }
 
-  const goToPrev = () => {
-    setSlide(true);
-    setTimeout(() => {
-      setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
-      setSlide(false);
-    }, 300);
-  };
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)
+  }
 
-  useEffect(() => {
-    if (timeoutRef.current) clearInterval(timeoutRef.current);
-    timeoutRef.current = setInterval(goToNext, 3000);
-    return () => clearInterval(timeoutRef.current);
-  }, [currentBanner]);
+  console.log("[v0] Books component - products:", products)
+  console.log("[v0] Books component - products length:", products?.length)
+  console.log("[v0] Books component - products type:", typeof products)
+  console.log("[v0] Books component - products is array:", Array.isArray(products))
+  console.log("[v0] Books component - loading:", loading, "error:", error)
 
-  const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e) => {
-    touchEndXRef.current = e.changedTouches[0].clientX;
-    const distance = touchStartXRef.current - touchEndXRef.current;
-    if (distance > 50) goToNext();
-    else if (distance < -50) goToPrev();
-  };
-
-  const current = banners[currentBanner];
+  // Log each individual product if any exist
+  if (products && products.length > 0) {
+    products.forEach((product, index) => {
+      console.log(`[v0] Product ${index}:`, product)
+    })
+  }
 
   return (
-    <div className="w-full shadow relative z-50">
-      {/* Navigation Bar */}
-     <Navbar title="Stationery & Books" />
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
 
-
-      {/* Offer Banner with Swipe and Arrows */}
-      <div className="px-6 py-4 relative transition-all duration-500">
+      {/* Banner Carousel */}
+      <div className="relative w-full h-64 overflow-hidden">
         <div
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          className={`${current.bg} rounded-xl flex items-center justify-between p-6 cursor-pointer transition-all duration-300 ${
-            slide ? 'translate-x-10 opacity-0' : 'translate-x-0 opacity-100'
-          }`}
+          ref={sliderRef}
+          className="flex transition-transform duration-500 ease-in-out h-full"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
-          <div>
-            <h2 className={`text-2xl font-bold ${current.text}`}>{current.title}</h2>
-            <p className="text-sm text-gray-700">{current.description}</p>
-            <button className={`mt-2 px-4 py-2 bg-white rounded-full font-semibold shadow ${current.button}`}>
-              Order Now
-            </button>
-          </div>
-          <img src={current.image} alt={current.title} className="w-32 h-40 object-contain" />
+          {banners.map((banner, index) => (
+            <div key={index} className={`min-w-full h-full ${banner.bgColor} flex items-center justify-between px-8`}>
+              <div className="flex-1">
+                <h2 className="text-4xl font-bold text-gray-800 mb-2">{banner.title}</h2>
+                <p className="text-gray-600 mb-4">{banner.description}</p>
+                <button className="bg-white text-gray-800 px-6 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                  {banner.buttonText}
+                </button>
+              </div>
+              <div className="flex-1 flex justify-end">
+                <img
+                  src={banner.image || "/placeholder.svg"}
+                  alt={banner.title}
+                  className="h-40 w-60 object-cover rounded-lg"
+                />
+              </div>
+            </div>
+          ))}
         </div>
-        <button onClick={goToPrev} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md">
-          <AiOutlineLeft size={24} />
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+        >
+          <AiOutlineLeft className="w-6 h-6 text-gray-700" />
         </button>
-        <button onClick={goToNext} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md">
-          <AiOutlineRight size={24} />
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+        >
+          <AiOutlineRight className="w-6 h-6 text-gray-700" />
         </button>
       </div>
+
+      {/* Products Section */}
+      <div className="container mx-auto px-4 py-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Books & Stationery Products</h2>
+
+        {loading && (
+          <div className="text-center py-8">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="mt-2 text-gray-600">Loading products...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            Error loading products: {error}
+          </div>
+        )}
+
+        {!loading && !error && products.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No books or stationery products available yet.</p>
+            <p className="text-gray-400 mt-2">Check back soon for new arrivals!</p>
+          </div>
+        )}
+
+        {!loading && !error && products.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                onClick={() => navigate(`/product/${product._id}`, { state: { product } })}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-  );
+  )
 }

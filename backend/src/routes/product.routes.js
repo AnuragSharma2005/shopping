@@ -1,143 +1,64 @@
-import { Router } from "express";
+import { Router } from "express"
 import {
-    createProduct,
-    getAllProducts,
-    getProductById,
-    updateProduct,
-    deleteProduct,
-    getSellerProducts,
-    getProductsByCategory,
-    getFeaturedProducts,
-    getProductStats,
-    updateProductStock
-} from "../controllers/product.controller.js";
-import { verifyJWT, authorizeRoles } from "../middleware/auth.middleware.js";
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+  getSellerProducts,
+  getProductsByCategory,
+  getFeaturedProducts,
+  getProductStats,
+  updateProductStock,
+  getProductsBySpecificCategory,
+} from "../controllers/product.controller.js"
+import { verifyJWT, authorizeRoles } from "../middleware/auth.middleware.js"
 
-const router = Router();
+const router = Router()
 
-// Public routes (no authentication required)
-router.route("/")
-    .get(getAllProducts); // Get all products with filters, search, pagination
+// =========================
+// Public routes (no auth)
+// =========================
+router.get("/", getAllProducts) // Get all products with filters/search/pagination
+router.get("/featured", getFeaturedProducts) // Get featured products
+router.get("/category/:category", getProductsByCategory) // Get products by category
+router.get("/category-type/:categoryType", getProductsBySpecificCategory) // Get products by specific category type
+router.get("/:productId", getProductById) // Get product by ID
+router.get("/search", getAllProducts) // Search products (via query)
+router.get("/filter", getAllProducts) // Filter products (via query)
 
-router.route("/featured")
-    .get(getFeaturedProducts); // Get featured products
+// =========================
+// Seller routes (auth required)
+// =========================
+router.post("/seller/create", verifyJWT, authorizeRoles("seller", "retailer", "admin"), createProduct)
 
-router.route("/category/:category")
-    .get(getProductsByCategory); // Get products by category
+router.get("/seller/my-products", verifyJWT, authorizeRoles("seller", "retailer", "admin"), getSellerProducts)
 
-router.route("/:productId")
-    .get(getProductById); // Get single product by ID
+router.get("/seller/stats", verifyJWT, authorizeRoles("seller", "retailer", "admin"), getProductStats)
 
-// Protected routes (authentication required)
-// Seller routes - Create and manage products
-router.route("/seller/create")
-    .post(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        createProduct
-    );
+router.put("/seller/:productId", verifyJWT, authorizeRoles("seller", "retailer", "admin"), updateProduct)
+router.patch("/seller/:productId", verifyJWT, authorizeRoles("seller", "retailer", "admin"), updateProduct)
+router.delete("/seller/:productId", verifyJWT, authorizeRoles("seller", "retailer", "admin"), deleteProduct)
 
-router.route("/seller/my-products")
-    .get(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        getSellerProducts
-    );
+router.patch("/seller/:productId/stock", verifyJWT, authorizeRoles("seller", "retailer", "admin"), updateProductStock)
 
-router.route("/seller/stats")
-    .get(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        getProductStats
-    );
+// =========================
+// Admin routes
+// =========================
+router.get("/admin/all", verifyJWT, authorizeRoles("admin"), getAllProducts)
 
-router.route("/seller/:productId")
-    .put(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        updateProduct
-    )
-    .patch(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        updateProduct
-    )
-    .delete(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        deleteProduct
-    );
+// Placeholder for future admin-specific controllers
+router.patch("/admin/:productId/approve", verifyJWT, authorizeRoles("admin"))
+router.patch("/admin/:productId/reject", verifyJWT, authorizeRoles("admin"))
+router.get("/admin/stats", verifyJWT, authorizeRoles("admin"))
 
-router.route("/seller/:productId/stock")
-    .patch(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        updateProductStock
-    );
+// =========================
+// Alternative CRUD paths
+// =========================
+// You can use these if you prefer shorter URLs
+router.post("/create", verifyJWT, authorizeRoles("seller", "retailer", "admin"), createProduct)
+router.patch("/update/:productId", verifyJWT, authorizeRoles("seller", "retailer", "admin"), updateProduct)
+router.delete("/delete/:productId", verifyJWT, authorizeRoles("seller", "retailer", "admin"), deleteProduct)
+router.patch("/stock/:productId", verifyJWT, authorizeRoles("seller", "retailer", "admin"), updateProductStock)
 
-// Alternative routes for better clarity
-router.route("/create")
-    .post(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        createProduct
-    );
-
-router.route("/update/:productId")
-    .patch(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        updateProduct
-    );
-
-router.route("/delete/:productId")
-    .delete(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        deleteProduct
-    );
-
-router.route("/stock/:productId")
-    .patch(
-        verifyJWT,
-        authorizeRoles("seller", "admin"),
-        updateProductStock
-    );
-
-// Admin routes for product management
-router.route("/admin/all")
-    .get(
-        verifyJWT,
-        authorizeRoles("admin"),
-        getAllProducts // Admin can see all products including out of stock
-    );
-
-router.route("/admin/:productId/approve")
-    .patch(
-        verifyJWT,
-        authorizeRoles("admin"),
-        // You can add admin approval controller here if needed
-    );
-
-router.route("/admin/:productId/reject")
-    .patch(
-        verifyJWT,
-        authorizeRoles("admin"),
-        // You can add admin rejection controller here if needed
-    );
-
-router.route("/admin/stats")
-    .get(
-        verifyJWT,
-        authorizeRoles("admin"),
-        // You can add admin stats controller here if needed
-    );
-    
-// Search and filter routes
-router.route("/search")
-    .get(getAllProducts); // Search products (uses query parameters)
-
-router.route("/filter")
-    .get(getAllProducts); // Filter products (uses query parameters)
-
-export default router;
+export default router

@@ -31,63 +31,66 @@ const [formData, setFormData] = useState({
   }
 
   // Submit handler with proper redirect
+// frontend/AuthPage.jsx
 const handleAuthSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!formData.email || !formData.password) {
-    alert("Please fill all required fields!");
-    return;
-  }
-
-  try {
-    let res;
-
-    if (isSignUp) {
-      const payload = new FormData();
-      if (userType === "customer") payload.append("name", formData.name);
-      if (userType === "retailer") payload.append("storeName", formData.storeName);
-
-      payload.append("email", formData.email);
-      payload.append("password", formData.password);
-      payload.append("role", userType);
-      payload.append("address", formData.address);
-      payload.append("phoneNumber", formData.phoneNumber);
-
-      res = await fetch("http://localhost:5000/api/v1/users/register", {
-        method: "POST",
-        body: payload,
-      });
-    } else {
-      // 🔹 Login API
-      res = await fetch("http://localhost:5000/api/v1/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+    if (!formData.email || !formData.password) {
+        alert("Please fill all required fields!");
+        return;
     }
 
-    const data = await res.json();
-    console.log("Auth API Response:", data); // 👈 check karne ke liye
+    try {
+        let res;
+        const payload = {
+            name: formData.name || formData.storeName,
+            email: formData.email,
+            password: formData.password,
+            role: userType,
+            address: formData.address,
+            phoneNumber: formData.phoneNumber,
+        };
 
-    if (!res.ok) {
-      alert(data.message || "Something went wrong!");
-      return;
+        if (isSignUp) {
+            res = await fetch("http://localhost:5000/api/v1/users/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+                credentials: "include",
+            });
+        } else {
+            res = await fetch("http://localhost:5000/api/v1/users/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: formData.email, password: formData.password, role: userType }),
+                credentials: "include",
+            });
+        }
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert(data.message || "Something went wrong");
+            return;
+        }
+
+        // Save user to AuthContext
+        login(data.data, data.data.token);
+
+        // Role-based redirect
+        if (data.data.role === "retailer") {  
+            navigate("/seller"); // Redirect retailer to seller page
+        } else {
+            navigate("/"); // Redirect customer or other roles to homepage
+        }
+
+    } catch (err) {
+        console.error("Auth error:", err);
+        alert("Server error, try again");
     }
-
-    // ✅ Save user + token to AuthContext
-login(data.data, data.data.token);
-
-    // Redirect after login/signup
-    const redirectTo = new URLSearchParams(location.search).get("redirect") || "/";
-    navigate(redirectTo);
-  } catch (err) {
-    console.error("Auth error:", err);
-    alert("Server error, please try again");
-  }
 };
+
+
 
 
 
