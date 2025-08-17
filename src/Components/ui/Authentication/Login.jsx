@@ -7,12 +7,15 @@ import { useAuth } from "../../../contexts/AuthContext"
 const AuthPage = () => {
   const [isSignUp, setIsSignUp] = useState(false)
   const [userType, setUserType] = useState("customer")
-  const [formData, setFormData] = useState({
-    name: "",
-    storeName: "",
-    email: "",
-    password: "",
-  })
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  password: "",
+  address: "",
+  phoneNumber: "",
+  storeName: ""
+});
+
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -28,145 +31,105 @@ const AuthPage = () => {
   }
 
   // Submit handler with proper redirect
-  const handleAuthSubmit = (e) => {
-    e.preventDefault()
+const handleAuthSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!formData.email || !formData.password) {
-      alert("Please fill all required fields!")
-      return
-    }
-
-    let userData
-    const token = "demo-token"
-
-    // Create user data based on form
-    if (isSignUp && userType === "customer") {
-      userData = {
-        name: formData.name,
-        email: formData.email,
-        type: "customer",
-      }
-    } else if (isSignUp && userType === "retailer") {
-      userData = {
-        storeName: formData.storeName,
-        email: formData.email,
-        type: "retailer",
-      }
-    } else {
-      // Sign in — fake user data
-      userData = {
-        name: "Demo User",
-        email: formData.email,
-        type: userType,
-      }
-    }
-
-    login(userData, token)
-
-    // Redirect to original page or home
-    const redirectTo = new URLSearchParams(location.search).get("redirect") || "/"
-    navigate(redirectTo)
+  if (!formData.email || !formData.password) {
+    alert("Please fill all required fields!");
+    return;
   }
 
+  try {
+    let res;
+
+    if (isSignUp) {
+      const payload = new FormData();
+      if (userType === "customer") payload.append("name", formData.name);
+      if (userType === "retailer") payload.append("storeName", formData.storeName);
+
+      payload.append("email", formData.email);
+      payload.append("password", formData.password);
+      payload.append("role", userType);
+      payload.append("address", formData.address);
+      payload.append("phoneNumber", formData.phoneNumber);
+
+      res = await fetch("http://localhost:5000/api/v1/users/register", {
+        method: "POST",
+        body: payload,
+      });
+    } else {
+      // 🔹 Login API
+      res = await fetch("http://localhost:5000/api/v1/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+    }
+
+    const data = await res.json();
+    console.log("Auth API Response:", data); // 👈 check karne ke liye
+
+    if (!res.ok) {
+      alert(data.message || "Something went wrong!");
+      return;
+    }
+
+    // ✅ Save user + token to AuthContext
+login(data.data, data.data.token);
+
+    // Redirect after login/signup
+    const redirectTo = new URLSearchParams(location.search).get("redirect") || "/";
+    navigate(redirectTo);
+  } catch (err) {
+    console.error("Auth error:", err);
+    alert("Server error, please try again");
+  }
+};
+
+
+
   // Dynamic fields
-  const renderFormFields = () => {
-    if (isSignUp && userType === "customer") {
-      return (
-        <>
-          <input
-            className="w-full p-2 border rounded"
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="w-full p-2 border rounded"
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="w-full p-2 border rounded"
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </>
-      )
-    }
-    if (isSignUp && userType === "retailer") {
-      return (
-        <>
-          <input
-            className="w-full p-2 border rounded"
-            type="text"
-            name="storeName"
-            placeholder="Store Name"
-            value={formData.storeName}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="w-full p-2 border rounded"
-            type="email"
-            name="email"
-            placeholder="Business Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="w-full p-2 border rounded"
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </>
-      )
-    }
+// Dynamic fields
+const renderFormFields = () => {
+  if (isSignUp && userType === "customer") {
     return (
       <>
-        <input
-          className="w-full p-2 border rounded"
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          className="w-full p-2 border rounded"
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <div className="flex justify-between w-full text-sm text-gray-600">
-          <label className="flex items-center gap-2">
-            <input type="checkbox" /> Remember me
-          </label>
-          <a href="#" className="text-purple-500 hover:underline">
-            Forgot password?
-          </a>
-        </div>
+        <input className="w-full p-2 border rounded" type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="text" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} required />
       </>
     )
   }
+
+  if (isSignUp && userType === "retailer") {
+    return (
+      <>
+        <input className="w-full p-2 border rounded" type="text" name="storeName" placeholder="Store Name" value={formData.storeName} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="email" name="email" placeholder="Business Email" value={formData.email} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="text" name="address" placeholder="Business Address" value={formData.address} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="text" name="phoneNumber" placeholder="Contact Number" value={formData.phoneNumber} onChange={handleChange} required />
+      </>
+    )
+  }
+
+  // 🔹 Ye part missing tha → Sign In ke liye email & password
+  if (!isSignUp) {
+    return (
+      <>
+        <input className="w-full p-2 border rounded" type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required />
+        <input className="w-full p-2 border rounded" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+      </>
+    )
+  }
+}
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">

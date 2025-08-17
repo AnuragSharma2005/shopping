@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["buyer","seller","admin"],
+        enum:["customer","seller","admin"],
         default:"buyer"
     },
     address: {
@@ -91,4 +91,4 @@ userSchema.methods.generateRefreshToken = function(){
      )
  }
 
-export const User = mongoose.model("User",userSchema)
+export const User = mongoose.model("shoppingUser",userSchema)

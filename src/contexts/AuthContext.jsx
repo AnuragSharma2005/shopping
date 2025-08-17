@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react"
 
 const AuthContext = createContext()
 
+// ✅ Custom hook
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
@@ -13,47 +14,46 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState(null)
 
-  // Auto login check
+  // ✅ Check token & user on first load
   useEffect(() => {
     const token = localStorage.getItem("token")
     const userData = localStorage.getItem("user")
 
-    if (token) {
-      setIsLoggedIn(true)
-      if (userData) {
-        try {
-          setUser(JSON.parse(userData))
-        } catch (err) {
-          console.error("Error parsing user data:", err)
-        }
+    if (token && userData && userData !== "undefined") {   // 👈 extra check
+      try {
+        setUser(JSON.parse(userData))
+      } catch (err) {
+        console.error("Error parsing user data:", err)
+        localStorage.removeItem("user") // corrupted data hatao
       }
     }
   }, [])
 
+  // ✅ Login function
   const login = (userData, token) => {
     localStorage.setItem("token", token)
-    localStorage.setItem("user", JSON.stringify(userData))
-    setIsLoggedIn(true)
-    setUser(userData)
+
+    if (userData) {   // 👈 only save if not null/undefined
+      localStorage.setItem("user", JSON.stringify(userData))
+    } else {
+      localStorage.removeItem("user")
+    }
+
+    setUser(userData || null)
   }
 
+  // ✅ Logout function
   const logout = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("user")
-    setIsLoggedIn(false)
     setUser(null)
   }
 
-  const value = {
-    isLoggedIn,
-    user,
-    login,
-    logout,
-    setIsLoggedIn,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, login, logout, isLoggedIn: !!user }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
