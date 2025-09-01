@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaHeart, FaSearch, FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
+
 import Navbar from "../../Navbar/Navbar";
+import ProductCard from "../../../ProductCard"
+import { useProducts } from "../../../hooks/userProducts";
 
 export default function Boy() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +14,7 @@ export default function Boy() {
   const timeoutRef = useRef(null);
   const touchStartXRef = useRef(0);
   const touchEndXRef = useRef(0);
+  const { products, loading, error } = useProducts("boy");
 
   const banners = [
     {
@@ -113,6 +117,21 @@ export default function Boy() {
           <AiOutlineRight size={24} />
         </button>
       </div>
+
+            <div className="px-6 py-4">
+  <h2 className="text-xl font-bold mb-4">Boy Products</h2>
+  {loading ? (
+    <p>Loading products...</p>
+  ) : error ? (
+    <p className="text-red-500">{error}</p>
+  ) : (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  )}
+</div>
     </div>
   );
 }

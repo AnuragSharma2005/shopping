@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { FaHeart, FaSearch, FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 import Navbar from '../Navbar/Navbar';
 import { Link } from 'react-router-dom';
+import ProductCard from "../../ProductCard"
+import { useProducts } from "../../hooks/userProducts";
 
 export default function Pharmacy() {
   const [isOpen, setIsOpen] = useState(false);
+  const { products, loading, error } = useProducts("pharmacy");
 
   return (
     <div className="w-full shadow relative z-50">
@@ -83,6 +86,21 @@ export default function Pharmacy() {
           <img src="/paan.png" alt="Paan Corner" className="w-32 h-32 object-contain" />
         </div>
       </div>
+
+            <div className="px-6 py-4">
+  <h2 className="text-xl font-bold mb-4">Pharmacy Products</h2>
+  {loading ? (
+    <p>Loading products...</p>
+  ) : error ? (
+    <p className="text-red-500">{error}</p>
+  ) : (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  )}
+</div>
     </div>
   );
 }

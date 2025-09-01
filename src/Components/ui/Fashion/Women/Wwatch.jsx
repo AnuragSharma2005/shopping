@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaHeart, FaSearch, FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import Navbar from "../../Navbar/Navbar"; 
+import Navbar from "../../Navbar/Navbar";
+import ProductCard from "../../../ProductCard"
+import { useProducts } from "../../../hooks/userProducts";
 
 export default function Wwatch() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +13,7 @@ export default function Wwatch() {
   const timeoutRef = useRef(null);
   const touchStartXRef = useRef(0);
   const touchEndXRef = useRef(0);
+  const { products, loading, error } = useProducts("wwatch");
 
   const banners = [
     {
@@ -85,15 +88,14 @@ export default function Wwatch() {
   return (
     <div className="w-full shadow relative z-50">
       {/* Navigation Bar */}
-     <Navbar title="Wristwear⌚ " />
+      <Navbar title="Wristwear⌚ " />
       {/* Offer Banner with Swipe and Arrows */}
       <div className="px-6 py-4 relative transition-all duration-500">
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className={`${current.bg} rounded-xl flex items-center justify-between p-6 cursor-pointer transition-all duration-300 ${
-            slide ? 'translate-x-10 opacity-0' : 'translate-x-0 opacity-100'
-          }`}
+          className={`${current.bg} rounded-xl flex items-center justify-between p-6 cursor-pointer transition-all duration-300 ${slide ? 'translate-x-10 opacity-0' : 'translate-x-0 opacity-100'
+            }`}
         >
           <div>
             <h2 className={`text-2xl font-bold ${current.text}`}>{current.title}</h2>
@@ -110,6 +112,21 @@ export default function Wwatch() {
         <button onClick={goToNext} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md">
           <AiOutlineRight size={24} />
         </button>
+      </div>
+
+      <div className="px-6 py-4">
+        <h2 className="text-xl font-bold mb-4">women watches Products</h2>
+        {loading ? (
+          <p>Loading products...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
